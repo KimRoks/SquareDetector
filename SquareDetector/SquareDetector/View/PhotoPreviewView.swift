@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PhotoPreviewView: UIView {
+final class PhotoPreviewView: UIView {
     private let photoView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .blue
@@ -35,7 +35,7 @@ class PhotoPreviewView: UIView {
     
     private let moveToRepointViewButton: UIButton = {
         let button = UIButton(type: .system)
-//        button.setBackgroundImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.square"), for: .normal)
+
         button.setImage(UIImage(systemName: "arrow.up.backward.and.arrow.down.forward.square"), for: .normal)
         button.tintColor = UIColor.signatureBlue
         

@@ -14,12 +14,12 @@ protocol PreviewMoveable: AnyObject {
 
 final class DetectorView: UIView {
     weak var delegate: PreviewMoveable?
+    
     // MARK: - properties
     
-    private let cameraView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .blue
-        
+    let cameraView: CameraView = {
+        let view = CameraView()
+
         return view
     }()
     
@@ -46,7 +46,6 @@ final class DetectorView: UIView {
         
         return button
     }()
-    
     
     // MARK: - init
     

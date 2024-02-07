@@ -17,6 +17,7 @@
 		C398A77E2B7373D700C0D715 /* PhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A77D2B7373D700C0D715 /* PhotoPreviewView.swift */; };
 		C398A7812B73742700C0D715 /* UIColor ++ extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7802B73742700C0D715 /* UIColor ++ extension.swift */; };
 		C398A7832B73744300C0D715 /* PhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7822B73744300C0D715 /* PhotoPreviewViewController.swift */; };
+		C398A7852B73755900C0D715 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7842B73755900C0D715 /* CameraView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		C398A77D2B7373D700C0D715 /* PhotoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewView.swift; sourceTree = "<group>"; };
 		C398A7802B73742700C0D715 /* UIColor ++ extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor ++ extension.swift"; sourceTree = "<group>"; };
 		C398A7822B73744300C0D715 /* PhotoPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewViewController.swift; sourceTree = "<group>"; };
+		C398A7842B73755900C0D715 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				C398A77B2B7373A900C0D715 /* DetectorView.swift */,
+				C398A7842B73755900C0D715 /* CameraView.swift */,
 				C398A77D2B7373D700C0D715 /* PhotoPreviewView.swift */,
 			);
 			path = View;
@@ -185,6 +188,7 @@
 				C398A7812B73742700C0D715 /* UIColor ++ extension.swift in Sources */,
 				C398A77E2B7373D700C0D715 /* PhotoPreviewView.swift in Sources */,
 				C398A7652B7371C800C0D715 /* SceneDelegate.swift in Sources */,
+				C398A7852B73755900C0D715 /* CameraView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
