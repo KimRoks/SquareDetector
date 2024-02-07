@@ -9,20 +9,28 @@
 /* Begin PBXBuildFile section */
 		C398A7632B7371C800C0D715 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7622B7371C800C0D715 /* AppDelegate.swift */; };
 		C398A7652B7371C800C0D715 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7642B7371C800C0D715 /* SceneDelegate.swift */; };
-		C398A7672B7371C800C0D715 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7662B7371C800C0D715 /* ViewController.swift */; };
+		C398A7672B7371C800C0D715 /* DetectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7662B7371C800C0D715 /* DetectorViewController.swift */; };
 		C398A76C2B7371CB00C0D715 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C398A76B2B7371CB00C0D715 /* Assets.xcassets */; };
 		C398A76F2B7371CB00C0D715 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C398A76D2B7371CB00C0D715 /* LaunchScreen.storyboard */; };
 		C398A7782B7372CF00C0D715 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = C398A7772B7372CF00C0D715 /* SnapKit */; };
+		C398A77C2B7373A900C0D715 /* DetectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A77B2B7373A900C0D715 /* DetectorView.swift */; };
+		C398A77E2B7373D700C0D715 /* PhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A77D2B7373D700C0D715 /* PhotoPreviewView.swift */; };
+		C398A7812B73742700C0D715 /* UIColor ++ extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7802B73742700C0D715 /* UIColor ++ extension.swift */; };
+		C398A7832B73744300C0D715 /* PhotoPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398A7822B73744300C0D715 /* PhotoPreviewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		C398A75F2B7371C800C0D715 /* SquareDetector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SquareDetector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C398A7622B7371C800C0D715 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C398A7642B7371C800C0D715 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C398A7662B7371C800C0D715 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C398A7662B7371C800C0D715 /* DetectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectorViewController.swift; sourceTree = "<group>"; };
 		C398A76B2B7371CB00C0D715 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C398A76E2B7371CB00C0D715 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C398A7702B7371CB00C0D715 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C398A77B2B7373A900C0D715 /* DetectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectorView.swift; sourceTree = "<group>"; };
+		C398A77D2B7373D700C0D715 /* PhotoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewView.swift; sourceTree = "<group>"; };
+		C398A7802B73742700C0D715 /* UIColor ++ extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor ++ extension.swift"; sourceTree = "<group>"; };
+		C398A7822B73744300C0D715 /* PhotoPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,12 +66,40 @@
 			children = (
 				C398A7622B7371C800C0D715 /* AppDelegate.swift */,
 				C398A7642B7371C800C0D715 /* SceneDelegate.swift */,
-				C398A7662B7371C800C0D715 /* ViewController.swift */,
+				C398A77A2B73738300C0D715 /* View */,
+				C398A7792B73737F00C0D715 /* Controller */,
+				C398A77F2B7373EA00C0D715 /* Utility */,
 				C398A76B2B7371CB00C0D715 /* Assets.xcassets */,
 				C398A76D2B7371CB00C0D715 /* LaunchScreen.storyboard */,
 				C398A7702B7371CB00C0D715 /* Info.plist */,
 			);
 			path = SquareDetector;
+			sourceTree = "<group>";
+		};
+		C398A7792B73737F00C0D715 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C398A7662B7371C800C0D715 /* DetectorViewController.swift */,
+				C398A7822B73744300C0D715 /* PhotoPreviewViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		C398A77A2B73738300C0D715 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C398A77B2B7373A900C0D715 /* DetectorView.swift */,
+				C398A77D2B7373D700C0D715 /* PhotoPreviewView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C398A77F2B7373EA00C0D715 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				C398A7802B73742700C0D715 /* UIColor ++ extension.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,8 +178,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C398A7672B7371C800C0D715 /* ViewController.swift in Sources */,
+				C398A7832B73744300C0D715 /* PhotoPreviewViewController.swift in Sources */,
+				C398A7672B7371C800C0D715 /* DetectorViewController.swift in Sources */,
 				C398A7632B7371C800C0D715 /* AppDelegate.swift in Sources */,
+				C398A77C2B7373A900C0D715 /* DetectorView.swift in Sources */,
+				C398A7812B73742700C0D715 /* UIColor ++ extension.swift in Sources */,
+				C398A77E2B7373D700C0D715 /* PhotoPreviewView.swift in Sources */,
 				C398A7652B7371C800C0D715 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
