@@ -8,12 +8,13 @@
 import UIKit
 import SnapKit
 
-protocol PreviewMoveable: AnyObject {
+protocol DetectorViewDelegate: AnyObject {
     func pushToPreviewView()
+    func shutterATapped()
 }
 
 final class DetectorView: UIView {
-    weak var delegate: PreviewMoveable?
+    weak var delegate: DetectorViewDelegate?
     
     // MARK: - properties
     
@@ -26,16 +27,18 @@ final class DetectorView: UIView {
     private lazy var movePhotoPreviewButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .cyan
-        button.addTarget(self, action: #selector(shutterButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(previewImageTapped), for: .touchUpInside)
         
         return button
     }()
 
-    private let shutterButton: UIButton = {
+    private lazy var shutterButton: UIButton = {
         let button = UIButton(type: .system)
         button.setBackgroundImage(UIImage(systemName: "camera.aperture"), for: .normal)
         button.tintColor = .systemGray
-
+        button.isEnabled = false
+        button.addTarget(self, action: #selector(shutterButtonTapped), for: .touchUpInside)
+        
         return button
     }()
     
@@ -97,7 +100,22 @@ final class DetectorView: UIView {
     }
     
     @objc
-    private func shutterButtonTapped() {
+    private func previewImageTapped() {
         delegate?.pushToPreviewView()
+    }
+    
+    @objc
+    private func shutterButtonTapped() {
+        delegate?.shutterATapped()
+    }
+    
+    //MARK: internal method
+    
+    func turnOnShutterButton() {
+        shutterButton.isEnabled = true
+    }
+    
+    func turnOffShutterButton() {
+        shutterButton.isEnabled = false
     }
 }

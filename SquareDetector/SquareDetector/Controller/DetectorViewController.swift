@@ -12,6 +12,7 @@ final class DetectorViewController: UIViewController {
     
     // MARK: - view life cycle
     private let detectorView = DetectorView()
+    private var lastRectangle: CIRectangleFeature?
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.tintColor = .white
@@ -75,30 +76,61 @@ final class DetectorViewController: UIViewController {
     }
 }
 
-extension DetectorViewController: PreviewMoveable {
+//MARK: DetectorViewDlegate
+
+extension DetectorViewController: DetectorViewDelegate {
+    func shutterATapped() {
+        print("dd")
+    }
+    
     func pushToPreviewView() {
         let photoPreviewView = PhotoPreviewViewController()
         self.navigationController?.pushViewController(photoPreviewView, animated: true)
     }
 }
 
+//MARK: CameraViewDelegate
+
 extension DetectorViewController: CameraViewDelegate {
     func cameraView(_ cameraView: CameraView, didDetectRectangles rectangles: [CIRectangleFeature], imageSize: CGSize) {
         DispatchQueue.main.async {
-            cameraView.layer.sublayers?.forEach { if $0 is CAShapeLayer { $0.removeFromSuperlayer() } }
             
             guard !rectangles.isEmpty else {
-                print("사각형이 없음")
+                self.detectorView.turnOffShutterButton()
+                removepreviousRectangle()
                 return
             }
             
-            for rectangle in rectangles {
-                let points = [self.convertPoint(rectangle.topLeft, view: cameraView, imageSize: imageSize), self.convertPoint(rectangle.topRight, view: cameraView, imageSize: imageSize), self.convertPoint(rectangle.bottomRight, view: cameraView, imageSize: imageSize), self.convertPoint(rectangle.bottomLeft, view: cameraView, imageSize: imageSize)]
+            let changedRectangles = rectangles.filter { rectangle in
+                if let lastRectangle = self.lastRectangle {
+                    return self.distanceBetween(lastRectangle, and: rectangle) >= imageSize.width * 0.03
+                } else {
+                    return true
+                }
+            }
+            
+            if !changedRectangles.isEmpty {
+                removepreviousRectangle()
+                self.detectorView.turnOnShutterButton()
                 
-                
-                self.showPoints(points, on: cameraView, imageSize: imageSize)
-                
-                print("사각형을 찾았습니다 \(rectangle.bounds)")
+                for rectangle in changedRectangles {
+                    let points = [self.convertPoint(rectangle.topLeft, view: cameraView, imageSize: imageSize),
+                                  self.convertPoint(rectangle.topRight, view: cameraView, imageSize: imageSize),
+                                  self.convertPoint(rectangle.bottomRight, view: cameraView, imageSize: imageSize),
+                                  self.convertPoint(rectangle.bottomLeft, view: cameraView, imageSize: imageSize)]
+                    
+                    self.showPoints(points, on: cameraView, imageSize: imageSize)
+                    
+                    self.lastRectangle = rectangle
+                }
+            }
+        }
+        
+        func removepreviousRectangle() {
+            cameraView.layer.sublayers?.forEach {
+                if $0 is CAShapeLayer {
+                    $0.removeFromSuperlayer()
+                }
             }
         }
     }
@@ -108,7 +140,7 @@ extension DetectorViewController: CameraViewDelegate {
         let scaleY = (view.frame.height - view.safeAreaInsets.top) / imageSize.height
         return CGPoint(
             x: point.x * scaleX,
-            y: view.frame.height - view.safeAreaInsets.top - (point.y * scaleY) // 네비게이션 컨트롤러의 높이를 고려합니다.
+            y: view.frame.height - view.safeAreaInsets.top - (point.y * scaleY)
         )
     }
     
@@ -117,5 +149,10 @@ extension DetectorViewController: CameraViewDelegate {
         
         self.showPoints(points, on: view, imageSize: imageSize)
     }
+    
+    func distanceBetween(_ rectangle1: CIRectangleFeature, and rectangle2: CIRectangleFeature) -> CGFloat {
+        let dx = rectangle1.bounds.midX - rectangle2.bounds.midX
+        let dy = rectangle1.bounds.midY - rectangle2.bounds.midY
+        return sqrt(dx * dx + dy * dy)
+    }
 }
-
