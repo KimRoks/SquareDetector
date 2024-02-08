@@ -79,10 +79,6 @@ final class DetectorViewController: UIViewController {
 //MARK: DetectorViewDlegate
 
 extension DetectorViewController: DetectorViewDelegate {
-    func shutterATapped() {
-        print("dd")
-    }
-    
     func pushToPreviewView() {
         let photoPreviewView = PhotoPreviewViewController()
         self.navigationController?.pushViewController(photoPreviewView, animated: true)
@@ -92,6 +88,11 @@ extension DetectorViewController: DetectorViewDelegate {
 //MARK: CameraViewDelegate
 
 extension DetectorViewController: CameraViewDelegate {
+    func cameraView(_ cameraView: CameraView, capturedImage image: UIImage) {
+        //TODO: 촬영된 이미지 처리
+        print(image)
+    }
+    
     func cameraView(_ cameraView: CameraView, didDetectRectangles rectangles: [CIRectangleFeature], imageSize: CGSize) {
         DispatchQueue.main.async {
             

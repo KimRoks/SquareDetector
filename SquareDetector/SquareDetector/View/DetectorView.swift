@@ -10,7 +10,6 @@ import SnapKit
 
 protocol DetectorViewDelegate: AnyObject {
     func pushToPreviewView()
-    func shutterATapped()
 }
 
 final class DetectorView: UIView {
@@ -106,7 +105,7 @@ final class DetectorView: UIView {
     
     @objc
     private func shutterButtonTapped() {
-        delegate?.shutterATapped()
+        cameraView.takePhoto()
     }
     
     //MARK: internal method

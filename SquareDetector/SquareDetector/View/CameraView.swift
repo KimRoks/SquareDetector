@@ -11,9 +11,10 @@ import CoreImage
 
 protocol CameraViewDelegate: AnyObject {
     func cameraView(_ cameraView: CameraView, didDetectRectangles rectangles: [CIRectangleFeature], imageSize: CGSize)
+    func cameraView(_ cameraView: CameraView, capturedImage: UIImage)
 }
 
-final class CameraView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
+final class CameraView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
     
     weak var delegate: CameraViewDelegate?
     
@@ -22,6 +23,7 @@ final class CameraView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
     private var session: AVCaptureSession?
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private var output: AVCaptureVideoDataOutput?
+    private var photoOutput = AVCapturePhotoOutput()
     
     //MARK: init
     
@@ -44,6 +46,10 @@ final class CameraView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         
         if session?.canAddInput(input) == true {
             session?.addInput(input)
+        }
+        
+        if session?.canAddOutput(photoOutput) == true {
+            session?.addOutput(photoOutput)
         }
         
         output = AVCaptureVideoDataOutput()
@@ -82,5 +88,21 @@ final class CameraView: UIView, AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let cameraImage = CIImage(cvPixelBuffer: pixelBuffer)
         detectRectangle(in: cameraImage)
+    }
+    
+    func takePhoto() {
+        let settings = AVCapturePhotoSettings()
+        photoOutput.capturePhoto(with: settings, delegate: self)
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let error = error {
+            print("Failed to process photo: \(error)")
+            return
+        }
+        
+        guard let imageData = photo.fileDataRepresentation() else { return }
+        guard let image = UIImage(data: imageData) else { return }
+        delegate?.cameraView(self, capturedImage: image)
     }
 }
