@@ -66,8 +66,8 @@ final class DetectorViewController: UIViewController {
             
             let shapeLayer = CAShapeLayer()
             shapeLayer.path = path.cgPath
-            shapeLayer.strokeColor = UIColor.red.cgColor
-            shapeLayer.fillColor = UIColor.clear.cgColor
+            shapeLayer.strokeColor = UIColor.subBlue.cgColor
+            shapeLayer.fillColor = UIColor.signatureBlue.cgColor.copy(alpha: 0.25)
             shapeLayer.lineWidth = 2.0
             
             view.layer.addSublayer(shapeLayer)
@@ -95,7 +95,7 @@ extension DetectorViewController: CameraViewDelegate {
             for rectangle in rectangles {
                 let points = [self.convertPoint(rectangle.topLeft, view: cameraView, imageSize: imageSize), self.convertPoint(rectangle.topRight, view: cameraView, imageSize: imageSize), self.convertPoint(rectangle.bottomRight, view: cameraView, imageSize: imageSize), self.convertPoint(rectangle.bottomLeft, view: cameraView, imageSize: imageSize)]
                 
-
+                
                 self.showPoints(points, on: cameraView, imageSize: imageSize)
                 
                 print("사각형을 찾았습니다 \(rectangle.bounds)")
@@ -104,16 +104,17 @@ extension DetectorViewController: CameraViewDelegate {
     }
     
     func convertPoint(_ point: CGPoint, view: UIView, imageSize: CGSize) -> CGPoint {
-        let scaleX = view.bounds.width / imageSize.width
-        let scaleY = view.bounds.height / imageSize.height
+        let scaleX = view.frame.width / imageSize.width
+        let scaleY = (view.frame.height - view.safeAreaInsets.top) / imageSize.height
         return CGPoint(
             x: point.x * scaleX,
-            y: view.bounds.height - (point.y * scaleY)
+            y: view.frame.height - view.safeAreaInsets.top - (point.y * scaleY) // 네비게이션 컨트롤러의 높이를 고려합니다.
         )
     }
     
     func drawRectangle(_ rectangle: CIRectangleFeature, on view: UIView, imageSize: CGSize) {
         let points = [self.convertPoint(rectangle.topLeft, view: view, imageSize: imageSize), self.convertPoint(rectangle.topRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomLeft, view: view, imageSize: imageSize)]
+        
         self.showPoints(points, on: view, imageSize: imageSize)
     }
 }
