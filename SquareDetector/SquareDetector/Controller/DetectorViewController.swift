@@ -82,8 +82,8 @@ final class DetectorViewController: UIViewController {
             view.layer.addSublayer(shapeLayer)
         }
     }
-
-    func convertPoint(_ point: CGPoint, view: UIView, imageSize: CGSize) -> CGPoint {
+    
+    private func convertPoint(_ point: CGPoint, view: UIView, imageSize: CGSize) -> CGPoint {
         let scaleX = view.frame.width / imageSize.width
         let scaleY = (view.frame.height - view.safeAreaInsets.top) / imageSize.height
         return CGPoint(
@@ -92,16 +92,24 @@ final class DetectorViewController: UIViewController {
         )
     }
     
-    func drawRectangle(_ rectangle: CIRectangleFeature, on view: UIView, imageSize: CGSize) {
+    private func drawRectangle(_ rectangle: CIRectangleFeature, on view: UIView, imageSize: CGSize) {
         let points = [self.convertPoint(rectangle.topLeft, view: view, imageSize: imageSize), self.convertPoint(rectangle.topRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomLeft, view: view, imageSize: imageSize)]
         
         self.showPoints(points, on: view, imageSize: imageSize)
     }
     
-    func distanceBetween(_ rectangle1: CIRectangleFeature, and rectangle2: CIRectangleFeature) -> CGFloat {
+    private func distanceBetween(_ rectangle1: CIRectangleFeature, and rectangle2: CIRectangleFeature) -> CGFloat {
         let dx = rectangle1.bounds.midX - rectangle2.bounds.midX
         let dy = rectangle1.bounds.midY - rectangle2.bounds.midY
         return sqrt(dx * dx + dy * dy)
+    }
+    
+    private func removepreviousRectangle(from view: UIView) {
+        view.layer.sublayers?.forEach {
+            if $0 is CAShapeLayer {
+                $0.removeFromSuperlayer()
+            }
+        }
     }
 }
 
@@ -125,7 +133,7 @@ extension DetectorViewController: CameraViewDelegate {
             
             guard !rectangles.isEmpty else {
                 self.detectorView.turnOffShutterButton()
-                removepreviousRectangle()
+                self.removepreviousRectangle(from: cameraView)
                 return
             }
             
@@ -138,7 +146,7 @@ extension DetectorViewController: CameraViewDelegate {
             }
             
             if !changedRectangles.isEmpty {
-                removepreviousRectangle()
+                self.removepreviousRectangle(from: cameraView)
                 self.detectorView.turnOnShutterButton()
                 
                 for rectangle in changedRectangles {
@@ -150,14 +158,6 @@ extension DetectorViewController: CameraViewDelegate {
                     self.showPoints(points, on: cameraView, imageSize: imageSize)
                     
                     self.lastRectangle = rectangle
-                }
-            }
-        }
-        
-        func removepreviousRectangle() {
-            cameraView.layer.sublayers?.forEach {
-                if $0 is CAShapeLayer {
-                    $0.removeFromSuperlayer()
                 }
             }
         }
