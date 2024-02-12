@@ -9,6 +9,10 @@ import UIKit
 
 class PhotoPreviewViewController: UIViewController {
 
+    //MARK: property
+    
+    let photoPreviewView = PhotoPreviewView()
+    
     let pageLabel: UILabel = {
         let label = UILabel()
         
@@ -21,7 +25,7 @@ class PhotoPreviewViewController: UIViewController {
     // MARK: - view life cycle
 
     override func loadView() {
-        self.view = PhotoPreviewView()
+        self.view = photoPreviewView
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,5 +40,11 @@ class PhotoPreviewViewController: UIViewController {
     private func configureNavigation() {
         self.navigationController?.navigationBar.backgroundColor = UIColor.signatureBlue
         self.navigationItem.titleView = pageLabel
+    }
+}
+
+extension PhotoPreviewViewController: DetectorViewControllerDelegate {
+    func detectorViewController(_ controller: DetectorViewController, didCaptureImage image: UIImage) {
+        photoPreviewView.updatePhoto(with: image)
     }
 }

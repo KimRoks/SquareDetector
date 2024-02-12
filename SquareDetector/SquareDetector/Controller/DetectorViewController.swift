@@ -8,11 +8,18 @@
 import UIKit
 import CoreImage
 
+protocol DetectorViewControllerDelegate: AnyObject {
+    func detectorViewController(_ controller: DetectorViewController, didCaptureImage image: UIImage)
+}
+
 final class DetectorViewController: UIViewController {
     
     // MARK: - view life cycle
+    
+    private let photoPreviewView = PhotoPreviewViewController()
     private let detectorView = DetectorView()
     private var lastRectangle: CIRectangleFeature?
+    weak var delegate: DetectorViewControllerDelegate?
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.navigationBar.tintColor = .white
@@ -28,6 +35,7 @@ final class DetectorViewController: UIViewController {
         configureNavigation()
         detectorView.delegate = self
         detectorView.cameraView.delegate = self
+        delegate = photoPreviewView
     }
     
     private func configureNavigation() {
@@ -74,13 +82,33 @@ final class DetectorViewController: UIViewController {
             view.layer.addSublayer(shapeLayer)
         }
     }
+
+    func convertPoint(_ point: CGPoint, view: UIView, imageSize: CGSize) -> CGPoint {
+        let scaleX = view.frame.width / imageSize.width
+        let scaleY = (view.frame.height - view.safeAreaInsets.top) / imageSize.height
+        return CGPoint(
+            x: point.x * scaleX,
+            y: view.frame.height - view.safeAreaInsets.top - (point.y * scaleY)
+        )
+    }
+    
+    func drawRectangle(_ rectangle: CIRectangleFeature, on view: UIView, imageSize: CGSize) {
+        let points = [self.convertPoint(rectangle.topLeft, view: view, imageSize: imageSize), self.convertPoint(rectangle.topRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomLeft, view: view, imageSize: imageSize)]
+        
+        self.showPoints(points, on: view, imageSize: imageSize)
+    }
+    
+    func distanceBetween(_ rectangle1: CIRectangleFeature, and rectangle2: CIRectangleFeature) -> CGFloat {
+        let dx = rectangle1.bounds.midX - rectangle2.bounds.midX
+        let dy = rectangle1.bounds.midY - rectangle2.bounds.midY
+        return sqrt(dx * dx + dy * dy)
+    }
 }
 
 //MARK: DetectorViewDlegate
 
 extension DetectorViewController: DetectorViewDelegate {
     func pushToPreviewView() {
-        let photoPreviewView = PhotoPreviewViewController()
         self.navigationController?.pushViewController(photoPreviewView, animated: true)
     }
 }
@@ -89,8 +117,7 @@ extension DetectorViewController: DetectorViewDelegate {
 
 extension DetectorViewController: CameraViewDelegate {
     func cameraView(_ cameraView: CameraView, capturedImage image: UIImage) {
-        //TODO: 촬영된 이미지 처리
-        print(image)
+        delegate?.detectorViewController(self, didCaptureImage: image)
     }
     
     func cameraView(_ cameraView: CameraView, didDetectRectangles rectangles: [CIRectangleFeature], imageSize: CGSize) {
@@ -134,26 +161,5 @@ extension DetectorViewController: CameraViewDelegate {
                 }
             }
         }
-    }
-    
-    func convertPoint(_ point: CGPoint, view: UIView, imageSize: CGSize) -> CGPoint {
-        let scaleX = view.frame.width / imageSize.width
-        let scaleY = (view.frame.height - view.safeAreaInsets.top) / imageSize.height
-        return CGPoint(
-            x: point.x * scaleX,
-            y: view.frame.height - view.safeAreaInsets.top - (point.y * scaleY)
-        )
-    }
-    
-    func drawRectangle(_ rectangle: CIRectangleFeature, on view: UIView, imageSize: CGSize) {
-        let points = [self.convertPoint(rectangle.topLeft, view: view, imageSize: imageSize), self.convertPoint(rectangle.topRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomRight, view: view, imageSize: imageSize), self.convertPoint(rectangle.bottomLeft, view: view, imageSize: imageSize)]
-        
-        self.showPoints(points, on: view, imageSize: imageSize)
-    }
-    
-    func distanceBetween(_ rectangle1: CIRectangleFeature, and rectangle2: CIRectangleFeature) -> CGFloat {
-        let dx = rectangle1.bounds.midX - rectangle2.bounds.midX
-        let dy = rectangle1.bounds.midY - rectangle2.bounds.midY
-        return sqrt(dx * dx + dy * dy)
     }
 }

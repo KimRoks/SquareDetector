@@ -11,7 +11,6 @@ import SnapKit
 final class PhotoPreviewView: UIView {
     private let photoView: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .blue
         
         return imageView
     }()
@@ -85,6 +84,10 @@ final class PhotoPreviewView: UIView {
             make.trailing.equalTo(self.safeAreaLayoutGuide)
             make.bottom.equalTo(self.safeAreaLayoutGuide)
         }
+    }
+    
+    func updatePhoto(with image: UIImage) {
+        photoView.image = image
     }
 }
 
